@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>potfolio-Ln-Thanawat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* General Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        /* Navigation */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 1rem 0; background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(10px);
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo {
+            font-size: 1.8rem; font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-menu { display: flex; list-style: none; gap: 2.5rem; }
+        .nav-item a {
+            color: #e2e8f0; text-decoration: none; font-weight: 500;
+            font-size: 1rem; transition: color 0.3s ease; position: relative;
+        }
+        .nav-item a:hover, .nav-item a.active { color: #667eea; }
+        .nav-item a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+        .nav-item a:hover::after, .nav-item a.active::after { width: 100%; }
+        .mobile-menu-btn { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+        .mobile-menu {
+            display: none; position: absolute; top: 100%; left: 0; right: 0;
+            background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(20px);
+            padding: 1rem 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .mobile-menu.active { display: block; }
+        .mobile-menu a {
+            display: block; color: #e2e8f0; text-decoration: none;
+            padding: 0.75rem 0; transition: color 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .mobile-menu a:last-child { border-bottom: none; }
+        .mobile-menu a:hover { color: #667eea; }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; padding: 0 2rem; text-align: center;
+        }
+        .hero-bg {
+            z-index: 0; position: absolute; inset: 0;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+        }
+        .hero-bg::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(102, 126, 234, 0.15), transparent 50%),
+                       radial-gradient(circle at 70% 50%, rgba(118, 75, 162, 0.15), transparent 50%);
+        }
+        .hero-particles {
+            z-index: 0; position: absolute; inset: 0;
+            background-image:
+                radial-gradient(2px 2px at 20px 30px, rgba(102, 126, 234, 0.3), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(118, 75, 162, 0.3), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(102, 126, 234, 0.4), transparent);
+            background-repeat: repeat; background-size: 200px 100px;
+            animation: particleFloat 20s linear infinite;
+        }
+        @keyframes particleFloat { 0% { transform: translateY(0px); } 100% { transform: translateY(-100px); } }
+        .hero-content { max-width: 900px; position: relative; z-index: 10; }
+        .hero-greeting { font-size: 1.2rem; color: #667eea; font-weight: 500; margin-bottom: 1rem; animation: fadeInUp 0.8s ease; }
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 800; margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #667eea 50%, #764ba2 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        .hero-occupation { font-size: clamp(1.3rem, 4vw, 2rem); color: #a5b4fc; font-weight: 600; margin-bottom: 1.5rem; animation: fadeInUp 1s ease 0.4s both; }
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.4rem); color: #cbd5e1; margin-bottom: 3rem;
+            max-width: 700px; margin-left: auto; margin-right: auto;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        .hero-buttons { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; animation: fadeInUp 1s ease 0.8s both; }
+        .btn {
+            padding: 1rem 2.5rem; border-radius: 50px; text-decoration: none;
+            font-weight: 600; font-size: 1rem; transition: all 0.3s ease;
+            cursor: pointer; border: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6); }
+        .btn-secondary { background: transparent; color: #667eea; border: 2px solid #667eea; }
+        .btn-secondary:hover { background: #667eea; color: #fff; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
+        .scroll-indicator {
+            position: absolute; bottom: 3rem; left: 50%;
+            transform: translateX(-50%); animation: bounce 2s infinite; color: #667eea;
+        }
+        .scroll-indicator i { font-size: 2rem; }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Section Styles */
+        .section { padding: 6rem 0; scroll-margin-top: 80px; position: relative; z-index: 1; }
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; text-align: center; margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .section-subtitle { text-align: center; color: #94a3b8; font-size: 1.2rem; max-width: 600px; margin: 0 auto 4rem; }
+
+        /* About Section */
+        #about { background: #111827; }
+        .about-content { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: center; }
+        .about-img { width: 100%; max-width: 350px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); object-fit: cover; margin: 0 auto; }
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .skill-item {
+            background: rgba(102, 126, 234, 0.1); padding: 1.25rem; border-radius: 12px;
+            text-align: center; border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+        }
+        .skill-item:hover { background: rgba(102, 126, 234, 0.2); transform: translateY(-5px); }
+        .skill-icon { font-size: 2.5rem; color: #667eea; margin-bottom: 0.75rem; }
+        .skill-name { font-size: 1rem; font-weight: 500; }
+
+        /* Portfolio & Certificate Section */
+        #portfolio { background: #0a0a0a; }
+        #certificates { background: #111827; }
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3rem; }
+        .portfolio-item {
+            background: #1f2937; border-radius: 20px; overflow: hidden;
+            transition: all 0.3s ease; border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+        .portfolio-item:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2); }
+        .portfolio-image { width: 100%; height: 280px; object-fit: cover; transition: transform 0.3s ease; }
+        .portfolio-item:hover .portfolio-image { transform: scale(1.05); }
+        .portfolio-content { padding: 2rem; }
+        .portfolio-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #ffffff; }
+
+        /* Footer */
+        .footer { background: #0a0a0a; border-top: 1px solid rgba(102, 126, 234, 0.1); padding: 3rem 0; }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem; }
+        .footer-text { color: #94a3b8; }
+        .footer-socials { display: flex; gap: 1.5rem; }
+        .footer-socials a {
+            color: #94a3b8; font-size: 1.5rem; width: 45px; height: 45px;
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            background: rgba(102, 126, 234, 0.1); transition: all 0.3s ease;
+        }
+        .footer-socials a:hover { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; transform: translateY(-3px); }
+
+        /* === Responsive for Mobile === */
+        @media (max-width: 768px) {
+            body {
+                word-wrap: break-word; /* For older browsers */
+                overflow-wrap: break-word; /* Standard property for breaking long words */
+            }
+            .container { padding: 0 1rem; }
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: block; }
+            .section { padding: 4rem 0; }
+            
+            /* Hero (Home) Section Mobile */
+            .hero {
+                padding: 6rem 1.5rem;
+                min-height: 90vh; /* Adjust height for mobile */
+            }
+            .hero-title { font-size: clamp(2.5rem, 12vw, 3.5rem); }
+            .hero-occupation { font-size: clamp(1.1rem, 5vw, 1.5rem); }
+            .hero-subtitle { font-size: clamp(1rem, 4vw, 1.1rem); margin-bottom: 2.5rem; }
+            .hero-buttons { gap: 1rem; }
+            .btn { padding: 0.8rem 2rem; font-size: 0.9rem;}
+
+            /* About Section Mobile */
+            .about-content { 
+                grid-template-columns: 1fr; 
+                text-align: center; 
+                gap: 2rem;
+            }
+            .about-details {
+                text-align: left; /* Change to left-align for readability */
+            }
+            
+            /* Portfolio & Certificates Mobile */
+            .portfolio-grid { gap: 1.5rem; }
+            .portfolio-content { padding: 1.5rem; }
+
+            /* Footer Mobile */
+            .footer-content { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container container">
+            <a href="#home" class="nav-logo">Portfolio</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="#portfolio" class="nav-link">กิจกรรมและการแข่งขัน</a></li>
+                <li class="nav-item"><a href="#certificates" class="nav-link">เกียรติบัตร</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+             <a href="#home" class="mobile-nav-link">Home</a>
+             <a href="#about" class="mobile-nav-link">About</a>
+             <a href="#portfolio" class="mobile-nav-link">กิจกรรมและการแข่งขัน</a>
+             <a href="#certificates" class="mobile-nav-link">เกียรติบัตร</a>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-particles"></div>
+        <div class="hero-content">
+            <p class="hero-greeting">สวัสดีครับ กระผมนาย..</p>
+            <h1 class="hero-title">ธนวัฒน์ อุณาวงค์</h1>
+            <p class="hero-occupation">โรงเรียนเลิงนกทา</p>
+            <p class="hero-subtitle">อายุ 18 ปี | วิศวกรรมศาสตร์ สาขา วิศวกรรมคอมพิวเตอร์<br>
+           เว็บไซต์นี้จัดทำขึ้นมาเพื่อรวบรวมและแสดงผลงานเพื่อยื่นผลงานในรอบ Portfolio เพียงเท่านั้น</p>
+            <div class="hero-buttons">
+                <a href="#portfolio" class="btn btn-primary">กิจกรรมและการแข่งขัน</a>
+                <a href="#certificates" class="btn btn-secondary">เกียรติบัตร</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <p class="section-subtitle"></p>
+            <div class="about-content">
+                <img src="images/about.jpg" alt="A portrait of Alex Rivera." class="about-img" loading="lazy">
+                <div class="about-details">
+                    <p>สวัสดีครับ คณะกรรมการทุกท่าน กระผม นายธนวัฒน์ อุณาวงค์ มีความชื่นชอบในการเขียนโค้ดและการคิดวิเคราห์อย่างเป็นระบบมาก ผมได้เริ่มหัดจากการทำเว็บไซต์อย่างง่ายด้วย html,css,javascipt และฝึกทักษะมาเรื่อยๆเป็นเวลาหลายเดือนและได้ลองฝึกภาษาคอมพิวเตอร์อื่น เช่น python , C และการใช้ Node.js , MongoDB หรือ การออกแบบ หน้าตา เว็บไซต์ด้วย figma ซึ่งกระผมเชื่อมันว่าสามารถเรียนรู้สิ่งใหม่ๆได้ตลอดเวลา และ หวังว่าจะได้ทำในสิ่งที่ชอบครับ </p>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-icon"><i class="fab fa-react"></i></div>
+                            <div class="skill-name">React</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon"><i class="fab fa-node-js"></i></div>
+                            <div class="skill-name">Node.js</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon"><i class="fab fa-python"></i></div>
+                            <div class="skill-name">Python</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-icon"><i class="fas fa-database"></i></div>
+                            <div class="skill-name">MongoDB</div>
+                        </div>
+            
+                        <div class="skill-item">
+                            <div class="skill-icon"><i class="fab fa-figma"></i></div>
+                            <div class="skill-name">Figma</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="section">
+        <div class="container">
+            <h2 class="section-title">กิจกรรมและการแข่งขัน</h2>
+            <p class="section-subtitle">รวบรวมกิจกรรมและรางวัลที่ได้รับ</p>
+            <div class="portfolio-grid">
+                 <div class="portfolio-item">
+                    <img src="images/ฟฟสชาติรูป.jpg" alt="ภาพกิจกรรม 1" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">ตัวแทนการแข่งขันฟิสิกส์สัปประยุทธ์ระดับชาติ ครั้งที่ 12 ระดับเหรียญทอง</h3>
+                        <p>ผมได้เข้าร่วมการแข่งขัน TYPY 12 ณ โรงเรียนสุรนารี จ.นครราชสีมา ผมได้เรียนรู้หลายๆอย่างจากการแข่งขันไม่ว่าจะเป็น การพูดการแก้ปัญหาเฉพาะหน้า การสังเกตุและการตั้งคำถามเชิงฟิสิกส์เพื่อนำไปสู่การหาคำตอบผมเชื่อว่าสิ่งเหล่านี้จะช่วย การคิดวิเคราะห์ภายในสาขาวิศวกรรมคอมพิวเตอร์อย่างมากแน่นอน</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/รูปฟฟสภาค.jpg" alt="ภาพกิจกรรม 2" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">ตัวแทนการแข่งขันฟิสิกส์สัปประยุทธ์ภาคตะวันออกเฉียงเหนือ ครั้งที่ 13 ระดับเหรียญทองรองชนะเลิศอันดับที่ 1</h3>
+                        <p>เข้าร่วมการแข่งขันฟิสิกส์สัปประยุทธ์ภาคตะวันออกเฉียงเหนือ ครั้งที่ 13 ณ โรงเรียนมุกดาหาร จ.มุกดาหาร และได้รับรางวัลระดับเหรียญทองรองชนะเลิศอันดับที่ 1 </p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/road to physics กิจกรรม.JPG" alt="ภาพกิจกรรม 3" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมค่าย road to physics 1 ณ มหาวิทยาลัยขอนแก่น</h3>
+                        <p>ค่ายจัดขึ้นโดย คณะวิทยาศาสตร์ สาขาฟิสิกส์ 4 วัน 3 คืน ได้รับความรู้ตลอด 4 วันและ ได้เรียนรู้การทำงานเป็นทีม และ การสอบท้ายค่ายผมทำคะแยย ได้ Top 5 ภายในค่าย</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/dekd.jpg" alt="ภาพกิจกรรม 4" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมการฟังบรรยายเกี่ยวกับการเตรียมตัวเข้า มหาวิทยาลัย โดย แอดมินเว็บไซต์ dek-d</h3>
+                        <p>เรียนรู้เกี่ยวกับระบบ Tcas และ การเตรียมตัวในการยื่นผลงานและการสอบแต่ละรอบและการวางแผนรอบ Admission</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/มขแลป.jpg" alt="ภาพกิจกรรม 5" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมค่ายปฏิบัตการแลป ชีววิทยา เคมี และ คอมพิวเตอร์ ณ มหาวิทยาลัยขอนแก่น</h3>
+                        <p>ได้เข้าร่วมการทดลอง 1.สารอาหาร 2.เซลกวาวานิก 3.สร้าง Ai Teachable Machine</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/คณะชีวการแพทย์.jpg" alt="ภาพกิจกรรม 6" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมการแนะแนวและปฎิบัติ วิทยาลัยวิศวกรรมชีวการแพทย์ ณ มหาวิทยาลัยรังสิต</h3>
+                        <p>ได้ความรู้เกี่ยวกับคณะการเรียนการสอนและการใช้อุปกรณ์ทางการแพทย์</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/คณะอาชญาวิทยา.jpg" alt="ภาพกิจกรรม 7" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมแนะแนวและปฏิบัติ คณะอาชญาวิทยาและการบริหารงานยุติธรรม ณ มหาวิทยาลัยรังสิต</h3>
+                        <p>ได้เรียนรู้เกี่ยวกับการตามหาหลักฐาน การเรียนรู้เกี่ยวกับหลักฐานลายนิ้วมือ และได้ร่วมตรวจสอบลายนิ้วมือจริง</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/กีฬาสี.jpg" alt="ภาพกิจกรรม 8" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">จัดกิจกรรมงาน กีฬาภายในโรงเรียนเลิงนกทาประจำปีการศึกษา 2567</h3>
+                        <p>เนื่องจากได้รับหน้าที่ในการจัดงานกีฬาภายใน กระผมได้ร่วมจัดงานกีฬาภายใน การจัดสรรนักกีฬา การติดต่อประสานงาน และ การเคลื่อนย้ายอุปกรณ์</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/ซุ้ม.jpg" alt="ภาพกิจกรรม 9" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">การจัดซุ้มนิทรรศการนานาชาติ ภายในโรงเรียนเลิงนกทาประจำปีการศึกษา 2567</h3>
+                        <p>ได้ทำการจัดซุ้มนิทรรศการนานาชาติ ภายในโรงเรียนประจำปีการศึกษา 2567</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/ขายอาหาร.jpg" alt="ภาพกิจกรรม 10" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมกิจกรรมนานชาติ การจัดตั้งร้านขายอาหารนานาชาติประจำปีการศึกษา 2566</h3>
+                        <p>เข้าร่วมการจัดตั้งร้ายอาหารนานาชาติ ภายในโรงเรียนเลิงนกทา ประจำปีการศึกษา 2566</p>
+                    </div>
+                </div>
+                
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="certificates" class="section">
+        <div class="container">
+            <h2 class="section-title">เกียรติบัตร</h2>
+            <p class="section-subtitle">รวบรวมเกียรติบัตรที่ได้รับจากการเข้าร่วมอบรมและแข่งขันต่างๆ</p>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <img src="images/TYPT_page-0001.jpg" alt="ภาพเกียรติบัตร 1" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">ตัวแทนการแข่งขันฟิสิกส์สัปประยุทธ์ระดับชาติ ครั้งที่ 12</h3>
+                        <p>ผมได้เข้าร่วมการแข่งขัน TYPY 12 ณ โรงเรียนสุรนารี จ.นครราชสีมา และได้รับรางวัล เหรียญทอง ระดับประเทศ ผมได้เรียนรู้หลายๆอย่างจากการแข่งขันไม่ว่าจะเป็น การพูดการแก้ปัญหาเฉพาะหน้า การสังเกตุและการตั้งคำถามเชิงฟิสิกส์เพื่อนำไปสู่การหาคำตอบผมเชื่อว่าสิ่งเหล่านี้จะช่วย การคิดวิเคราะห์ภายในสาขาวิศวกรรมคอมพิวเตอร์อย่างมากแน่นอน</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/อุบล คอม.jpg" alt="ภาพเกียรติบัตร 2" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมการอบรมเชิงปฏิบัติการทางด้านคอมพิวเตอร์ ณ มหาวิทยาลัยอุบลราชธานี </h3>
+                        <p>การอบรมครั้งนี้ ผมได้เรียนรู้การใช้คำสั่งพื้นฐาน ภาษา python และ การใช้ figma ขั้นพื้นฐาน ซึ่งการอบรมครังนี้ทำให้ผมเกิดความสนใจในการออกแบบและการสร้าง Ai ด้วย python เป็นอย่างมากผมจะนำความรู้ที่เรียนรู้จากการอบรมมาพัฒนาฝีมืออย่างต่อเนื่อง</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/Road to physics ท็อป5.jpg" alt="ภาพเกียรติบัตร 3" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">ได้รับรางวัลคะแนน Top 5 ค่าย Road To physics 1</h3>
+                        <p>ค่าย Road To physics 1 จัดขึ้น ณ มหาวิทยาลัยขอนแก่น ซึ่งหลังจากที่ได้เข้าค่ายเรียนรู้ 4 วัน 3 คืน วันสุดท้ายจะมีการสอบวัดความรู้และผมสอบวัดความรู้ได้ลำดับที่ 5 ของค่าย</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/สมาคมคณิตศาสตร์ เข้าร่วม_page-0001.jpg" alt="ภาพเกียรติบัตร 4" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมการสอบแข่งขันคณิตศาสตร์ ระดับมัธยมตอนปลาย โดย สมาคมคณิตศาสตร์แห่งประเทศไทย</h3>
+                        <p>ผมได้เข้าร่วมการสอบแข่่งขันคณิตศาสตร์ระดับมัธยมตอนปลาย โดย สมาคมคณิตศาสตร์แห่งประเทศไทย ได้เรียนรู้จุดด้อยของตัวเองหลังจากการสอบและได้รับประสบการณ์การสอบอย่างมาก และจะนำจุดที่ด้อยนี้ไปปรับปรุงให้ดียิ่งขึ้น</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/มข AI_page-0001.jpg" alt="ภาพเกียรติบัตร 5" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมการฝึกปฎิบัติการคอมพิวเตอร์ การสร้าง AI ด้วย Teachable Machine ณ มหาวิทยาลัยขอนแก่น</h3>
+                        <p>ได้เรียนรู้การสร้าง AI ด้วย Teachable Machine เป็นการเรียนรู้การให้ Ai ตรวจสอบรูปภาพหรือการขัดแยกสินค้าที่ต่างกันและเหมือนกัน</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/มข เซลกวาวานิก_page-0001.jpg" alt="ภาพเกียรติบัตร 6" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมการฝึกปฎิบัติการเคมี เซลล์กัลวานิก ณ มหาวิทยาลัยขอนแก่น </h3>
+                        <p>ได้เรียนรู้การดู เซลกวาวานิก และ การคำนวณสูตรที่จำเป็นและการคัดแยกสาร</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/มข สารอาหาร_page-0001.jpg" alt="ภาพเกียรติบัตร 7" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมการฝึกปฎิบัติการชีววิทยา สารอาหาร ณ มหาวิทยาลัยขอนแก่น</h3>
+                        <p>ได้เรียนรู้วิธีการทำสารอาหารแบบต่างๆ และ วิธีการคัดแยกและความแตกต่างของสารอาหารแต่ละชนิด</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/sci show ช่วยหลังบ้าน.jpg" alt="ภาพเกียรติบัตร 8" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">ร่วมช่วยการจัดเตรียมแสดง Sci show งานศิลปหัตกรรมนักเรียน</h3>
+                        <p>การแข่งขันนี้ถึงแม้ว่าผมจะไม่ได้เป็นตัวแทนแข่ง แต่ผมก็ยังได้ช่วยเรื่อง ฉาก การเตรียมอุปกรณ์ ซึ่งถ้าขาดหน้าที่ใดหน้าที่หนึ่งจะไม่สามารถแข่งขันได้แน่นอน</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/มศว ฟังบรรยาย.jpg" alt="ภาพเกียรติบัตร 9" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมการฟังบรรยายพิเศษสาขาดาราศาสตร์ ณ มหาวิทยาลัยศรีนครินทรวิโรฒ</h3>
+                        <p>ได้เข้าร่วมการบรรยายพิเศษเกี่ยวกับดาราศาสตร์และเทโนโลยีในปัจจุบันและความก้าวหน้าทางเทคโนโลยีหลังจากที่ AI เข้ามามีบทบาทมากขึ้น</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="images/ค่ายแนะแนว รรเลิง.jpg" alt="ภาพเกียรติบัตร 10" class="portfolio-image" loading="lazy">
+                    <div class="portfolio-content">
+                        <h3 class="portfolio-title">เข้าร่วมกิจกรรมค่ายแนะแนว ณ โรงเรียนเลิงนกทา</h3>
+                        <p>ได้เข้าร่วมกิจกรรมแนะแนวจากพี่ๆ มหาวิทยาลัยต่างๆ และ คณะต่างๆเพื่อเป็นการเพิ่มการตัดสินใจเลือกคณะและสาขาในอนาคต</p>
+                    </div>
+                </div>
+                
+                
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="footer">
+        <div class="container footer-content">
+            <p class="footer-text">&copy; นาย ธนวัฒน์ อุณาวงค์ โรงเรียนเลิงนกทา</p>
+            <div class="footer-socials">
+                <a href="#" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+                <a href="#" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+                <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.getElementById('navbar');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+            const sections = document.querySelectorAll('.section');
+            
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
+            
+            // Close mobile menu when a link is clicked
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if(mobileMenu.classList.contains('active')) {
+                        mobileMenu.classList.remove('active');
+                    }
+                });
+            });
+
+            // Active link highlighting on scroll
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.6 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        document.querySelectorAll('.nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => {
+                if(section.id) observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
